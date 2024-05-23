@@ -1,12 +1,15 @@
 import fs from 'fs';
 import path from 'path';
+import childProcess from "child_process";
 
 const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json")).toString();
 const packageJson = JSON.parse(packageJsonText);
 
-const localPublicKeyText = fs.readFileSync(path.resolve(__dirname, "../../public-key-base64.txt"), "utf8");
+const localPublicKeyText = childProcess.execSync("sops --decrypt ../../public-key-base64.txt.enc", {
+    cwd: path.resolve(__dirname)
+}).toString();
 
-console.log({localPublicKeyText});
+console.log({localPublicKeyText: localPublicKeyText});
 console.log("Build environment:", {BUILD_ENV: process.env.BUILD_ENV, DEPLOY_MODE: process.env.DEPLOY_MODE, NODE_ENV: process.env.NODE_ENV});
 
 const iconSizes = [16, 32, 48, 64];

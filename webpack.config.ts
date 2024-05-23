@@ -2,6 +2,7 @@ import webpack from "webpack";
 import path from "path";
 import CopyPlugin from "copy-webpack-plugin";
 import fs from "fs";
+import childProcess from "child_process";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import {generateKeypairSync} from "./util/generateKeypairSync";
 import {checkDoPublicAndPrivateKeysExist} from "./util/checkDoPublicAndPrivateKeysExist";
@@ -11,8 +12,12 @@ if(!checkDoPublicAndPrivateKeysExist()) {
 }
 
 if(process.env.DEPLOY_MODE === 'initial-deploy') {
+    const privateKeyStr = childProcess.execSync("sops --decrypt private-key.pem.enc", {
+        cwd: path.resolve(__dirname)
+    }).toString();
+
     fs.mkdirSync(path.resolve(__dirname, "dist"), {recursive: true});
-    fs.cpSync(path.resolve(__dirname, "private-key.pem"), path.resolve(__dirname, "dist/key.pem"));
+    fs.writeFileSync(path.resolve(__dirname, "dist/key.pem"), privateKeyStr);
 }
 
 require('./src/meta/generate-manifest');
