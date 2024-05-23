@@ -2,11 +2,11 @@ import webpack from "webpack";
 import path from "path";
 import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import { generateKeypairSync } from "./util/generateKeypairSync";
-import { checkDoPublicAndPrivateKeysExist } from "./util/checkDoPublicAndPrivateKeysExist";
-import { injectPrivateKeyIntoWebpackOutputFolder } from "./util/injectPrivateKeyIntoWebpackOutputFolder";
-import { withEntriesWithFalsyValuesStripped } from "./util/withEntriesWithFalsyValuesStripped";
-import { computeNameForWebpackOutputFolder } from "./util/computeNameForWebpackOutputFolder";
+import { generateKeypairSync } from "./webpack-helpers/generateKeypairSync";
+import { checkDoPublicAndPrivateKeysExist } from "./webpack-helpers/checkDoPublicAndPrivateKeysExist";
+import { injectPrivateKeyIntoWebpackOutputFolder } from "./webpack-helpers/injectPrivateKeyIntoWebpackOutputFolder";
+import { withEntriesWithFalsyValuesStripped } from "./webpack-helpers/withEntriesWithFalsyValuesStripped";
+import { computeNameForWebpackOutputFolder } from "./webpack-helpers/computeNameForWebpackOutputFolder";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
 const nameForWebpackOutputFolder = computeNameForWebpackOutputFolder();
@@ -19,7 +19,7 @@ if (process.env.DEPLOY_MODE === "initial-deploy") {
 	injectPrivateKeyIntoWebpackOutputFolder();
 }
 
-require("./src/metadata/generate-manifest");
+require("./static/generate-manifest");
 
 module.exports = {
 	output: {
@@ -66,7 +66,7 @@ module.exports = {
 		new CopyPlugin({
 			patterns: [
 				{
-					from: path.resolve(__dirname, "src/metadata/icons/"),
+					from: path.resolve(__dirname, "static/icons/"),
 					to: path.resolve(__dirname, `${nameForWebpackOutputFolder}/icons/`),
 				},
 			],

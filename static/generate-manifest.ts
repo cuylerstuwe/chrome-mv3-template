@@ -1,14 +1,14 @@
 import fs from "fs";
 import path from "path";
 import childProcess from "child_process";
-import { computeNameForWebpackOutputFolder } from "../../util/computeNameForWebpackOutputFolder";
+import { computeNameForWebpackOutputFolder } from "../webpack-helpers/computeNameForWebpackOutputFolder";
 
-const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json")).toString();
+const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../package.json")).toString();
 const packageJson = JSON.parse(packageJsonText);
 
 const localPublicKeyText = childProcess
 	.execSync("sops --decrypt public-key-base64.txt.enc", {
-		cwd: path.resolve(__dirname, "../../"),
+		cwd: path.resolve(__dirname, "../"),
 	})
 	.toString();
 
