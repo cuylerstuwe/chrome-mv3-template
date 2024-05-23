@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import childProcess from "child_process";
+import {computeNameForWebpackOutputFolder} from "../../util/computeNameForWebpackOutputFolder";
 
 const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json")).toString();
 const packageJson = JSON.parse(packageJsonText);
@@ -11,6 +12,8 @@ const localPublicKeyText = childProcess.execSync("sops --decrypt public-key-base
 
 console.log({localPublicKeyText: localPublicKeyText});
 console.log("Build environment:", {BUILD_ENV: process.env.BUILD_ENV, DEPLOY_MODE: process.env.DEPLOY_MODE, NODE_ENV: process.env.NODE_ENV});
+
+const nameForWebpackOutputFolder = computeNameForWebpackOutputFolder();
 
 const iconSizes = [16, 32, 48, 64];
 
@@ -138,7 +141,7 @@ const manifestTemplate = {
     ]
 };
 
-fs.mkdirSync(path.resolve(__dirname, "../../dist"), {recursive: true});
-fs.writeFileSync(path.resolve(__dirname, "../../dist/manifest.json"), JSON.stringify(manifestTemplate), {
+fs.mkdirSync(path.resolve(__dirname, `../../${nameForWebpackOutputFolder}`), {recursive: true});
+fs.writeFileSync(path.resolve(__dirname, `../../${nameForWebpackOutputFolder}/manifest.json`), JSON.stringify(manifestTemplate), {
 
 });

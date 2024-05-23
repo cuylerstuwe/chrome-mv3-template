@@ -4,20 +4,27 @@ import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import {generateKeypairSync} from "./util/generateKeypairSync";
 import {checkDoPublicAndPrivateKeysExist} from "./util/checkDoPublicAndPrivateKeysExist";
-import {injectPrivateKeyIntoDistFolder} from "./util/injectPrivateKeyIntoDistFolder";
+import {injectPrivateKeyIntoWebpackOutputFolder} from "./util/injectPrivateKeyIntoWebpackOutputFolder";
 import {withEntriesWithFalsyValuesStripped} from "./util/withEntriesWithFalsyValuesStripped";
+import {computeNameForWebpackOutputFolder} from "./util/computeNameForWebpackOutputFolder";
+
+const nameForWebpackOutputFolder = computeNameForWebpackOutputFolder();
 
 if(!checkDoPublicAndPrivateKeysExist()) {
     generateKeypairSync();
 }
 
 if(process.env.DEPLOY_MODE === 'initial-deploy') {
-    injectPrivateKeyIntoDistFolder();
+    injectPrivateKeyIntoWebpackOutputFolder();
 }
 
 require('./src/metadata/generate-manifest');
 
 module.exports = {
+    output: {
+        path: path.resolve(__dirname, nameForWebpackOutputFolder),
+        filename: "[name].js"
+    },
     mode: process.env.NODE_ENV === "production" ? "production" : "development",
     devtool: process.env.NODE_ENV !== "production" ? "inline-source-map" : undefined,
     entry: {
@@ -50,7 +57,7 @@ module.exports = {
             patterns: [
                 {
                     from: path.resolve(__dirname, 'src/metadata/icons/'),
-                    to: path.resolve(__dirname, 'dist/icons/')
+                    to: path.resolve(__dirname, `${nameForWebpackOutputFolder}/icons/`)
                 }
             ]
         }),
