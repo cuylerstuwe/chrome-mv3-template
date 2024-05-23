@@ -1,17 +1,23 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 import childProcess from "child_process";
-import {computeNameForWebpackOutputFolder} from "../../util/computeNameForWebpackOutputFolder";
+import { computeNameForWebpackOutputFolder } from "../../util/computeNameForWebpackOutputFolder";
 
 const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json")).toString();
 const packageJson = JSON.parse(packageJsonText);
 
-const localPublicKeyText = childProcess.execSync("sops --decrypt public-key-base64.txt.enc", {
-    cwd: path.resolve(__dirname, "../../")
-}).toString();
+const localPublicKeyText = childProcess
+	.execSync("sops --decrypt public-key-base64.txt.enc", {
+		cwd: path.resolve(__dirname, "../../"),
+	})
+	.toString();
 
-console.log({localPublicKeyText: localPublicKeyText});
-console.log("Build environment:", {BUILD_ENV: process.env.BUILD_ENV, DEPLOY_MODE: process.env.DEPLOY_MODE, NODE_ENV: process.env.NODE_ENV});
+console.log({ localPublicKeyText: localPublicKeyText });
+console.log("Build environment:", {
+	BUILD_ENV: process.env.BUILD_ENV,
+	DEPLOY_MODE: process.env.DEPLOY_MODE,
+	NODE_ENV: process.env.NODE_ENV,
+});
 
 const nameForWebpackOutputFolder = computeNameForWebpackOutputFolder();
 
@@ -22,126 +28,121 @@ const iconFilenamePrefix = "icon";
 const iconFiletypeSuffix = "png";
 
 const iconsObj = Object.fromEntries(
-    iconSizes.map(iconSize => (
-        [iconSize, `${iconDirectory}/${iconFilenamePrefix}${iconSize}.${iconFiletypeSuffix}`]
-    ))
+	iconSizes.map((iconSize) => [iconSize, `${iconDirectory}/${iconFilenamePrefix}${iconSize}.${iconFiletypeSuffix}`]),
 );
 
 const manifestTemplate = {
-    key: (
-        process.env.DEPLOY_MODE === "local-dev"
-            ? localPublicKeyText
-            : undefined
-    ),
+	key: process.env.DEPLOY_MODE === "local-dev" ? localPublicKeyText : undefined,
 
-    manifest_version: 3,
-    name: packageJson.longName || "package.json is missing a name",
-    description: packageJson.description || "package.json is missing a description",
-    version: packageJson.version,
+	manifest_version: 3,
+	name: packageJson.longName || "package.json is missing a name",
+	description: packageJson.description || "package.json is missing a description",
+	version: packageJson.version,
 
-    icons: iconsObj,
+	icons: iconsObj,
 
-    action: {
-        default_icon: iconsObj,
-        default_title: packageJson.longName,
-        default_popup: "popup.html"
-    },
+	action: {
+		default_icon: iconsObj,
+		default_title: packageJson.longName,
+		default_popup: "popup.html",
+	},
 
-    background: {
-        service_worker: "serviceWorker.js"
-    },
+	background: {
+		service_worker: "serviceWorker.js",
+	},
 
-    content_scripts: [
-        {
-            matches: ["<all_urls>"], // TODO: Make this more specific, rather than the template default of matching everything.
-            js: ["content.js"],
-            // all_frames: true
-        }
-    ],
+	content_scripts: [
+		{
+			matches: ["<all_urls>"], // TODO: Make this more specific, rather than the template default of matching everything.
+			js: ["content.js"],
+			// all_frames: true
+		},
+	],
 
-    host_permissions: [
-    ],
+	host_permissions: [],
 
-    // web_accessible_resources: {
-    //     resources: [/* resources */],
-    //     matches: [/* urls */],
-    //     extension_ids: [/* keys */]
-    // },
+	// web_accessible_resources: {
+	//     resources: [/* resources */],
+	//     matches: [/* urls */],
+	//     extension_ids: [/* keys */]
+	// },
 
-    permissions: [
-        // "activeTab",
-        // "alarms",
-        // "background",
-        // "bookmarks",
-        // "browsingData",
-        // "certificateProvider",
-        // "clipboardRead",
-        // "clipboardWrite",
-        // "contentSettings",
-        // "contextMenus",
-        // "cookies",
-        // "debugger",
-        // "declarativeContent",
-        // "declarativeNetRequest",
-        // "declarativeNetRequestFeedback",
-        // "declarativeWebRequest",
-        // "desktopCapture",
-        // "displaySource",
-        // "dns",
-        // "documentScan",
-        // "downloads",
-        // "enterprise.deviceAttributes",
-        // "enterprise.hardwarePlatform",
-        // "enterprise.networkingAttributes",
-        // "enterprise.platformKeys",
-        // "experimental",
-        // "fileBrowserHandler",
-        // "fileSystemProvider",
-        // "fontSettings",
-        // "gcm",
-        // "geolocation",
-        // "history",
-        // "identity",
-        // "idle",
-        // "idltest",
-        // "login",
-        // "loginScreenStorage",
-        // "loginState",
-        // "management",
-        // "nativeMessaging",
-        // "networking.config",
-        // "notifications",
-        // "pageCapture",
-        // "platformKeys",
-        // "power",
-        // "printerProvider",
-        // "printing",
-        // "printingMetrics",
-        // "privacy",
-        // "processes",
-        // "proxy",
-        // "sessions",
-        // "signedInDevices",
-        // "storage",
-        // "system.cpu",
-        // "system.display",
-        // "system.memory",
-        // "system.storage",
-        // "tabCapture",
-        // "tabs",
-        // "topSites",
-        // "tts",
-        // "ttsEngine",
-        // "unlimitedStorage",
-        // "vpnProvider",
-        // "wallpaper",
-        // "webNavigation",
-        // "webRequest",
-        // "webRequestBlocking"
-    ]
+	permissions: [
+		// "activeTab",
+		// "alarms",
+		// "background",
+		// "bookmarks",
+		// "browsingData",
+		// "certificateProvider",
+		// "clipboardRead",
+		// "clipboardWrite",
+		// "contentSettings",
+		// "contextMenus",
+		// "cookies",
+		// "debugger",
+		// "declarativeContent",
+		// "declarativeNetRequest",
+		// "declarativeNetRequestFeedback",
+		// "declarativeWebRequest",
+		// "desktopCapture",
+		// "displaySource",
+		// "dns",
+		// "documentScan",
+		// "downloads",
+		// "enterprise.deviceAttributes",
+		// "enterprise.hardwarePlatform",
+		// "enterprise.networkingAttributes",
+		// "enterprise.platformKeys",
+		// "experimental",
+		// "fileBrowserHandler",
+		// "fileSystemProvider",
+		// "fontSettings",
+		// "gcm",
+		// "geolocation",
+		// "history",
+		// "identity",
+		// "idle",
+		// "idltest",
+		// "login",
+		// "loginScreenStorage",
+		// "loginState",
+		// "management",
+		// "nativeMessaging",
+		// "networking.config",
+		// "notifications",
+		// "pageCapture",
+		// "platformKeys",
+		// "power",
+		// "printerProvider",
+		// "printing",
+		// "printingMetrics",
+		// "privacy",
+		// "processes",
+		// "proxy",
+		// "sessions",
+		// "signedInDevices",
+		// "storage",
+		// "system.cpu",
+		// "system.display",
+		// "system.memory",
+		// "system.storage",
+		// "tabCapture",
+		// "tabs",
+		// "topSites",
+		// "tts",
+		// "ttsEngine",
+		// "unlimitedStorage",
+		// "vpnProvider",
+		// "wallpaper",
+		// "webNavigation",
+		// "webRequest",
+		// "webRequestBlocking"
+	],
 };
 
-fs.mkdirSync(path.resolve(__dirname, `../../${nameForWebpackOutputFolder}`), {recursive: true});
-fs.writeFileSync(path.resolve(__dirname, `../../${nameForWebpackOutputFolder}/manifest.json`), JSON.stringify(manifestTemplate), {
-
-});
+fs.mkdirSync(path.resolve(__dirname, `../../${nameForWebpackOutputFolder}`), { recursive: true });
+fs.writeFileSync(
+	path.resolve(__dirname, `../../${nameForWebpackOutputFolder}/manifest.json`),
+	JSON.stringify(manifestTemplate),
+	{},
+);
