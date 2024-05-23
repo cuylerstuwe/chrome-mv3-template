@@ -1,6 +1,13 @@
 module.exports = {
-    "plugins": ["@babel/plugin-proposal-optional-chaining"],
+    "plugins": [],
     presets: [
+      [
+        '@babel/preset-typescript',
+        {
+          isTSX: true,
+          allExtensions: true,
+        },
+      ],
       [
         '@babel/preset-env',
         {
@@ -9,5 +16,6 @@ module.exports = {
           },
         },
       ],
+      ['@babel/preset-react'],
     ],
   };

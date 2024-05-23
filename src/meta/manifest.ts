@@ -43,13 +43,13 @@ const manifest = {
     },
 
     background: {
-        service_worker: "serviceWorker.js"
+        service_worker: "serviceWorker.ts"
     },
 
     content_scripts: [
         {
             matches: ["<all_urls>"], // TODO: Make this more specific, rather than the template default of matching everything.
-            js: ["content.js"],
+            js: ["content.ts"],
             // all_frames: true
         }
     ],

@@ -36,21 +36,24 @@ if(process.env.DEPLOY_MODE === 'initial-deploy') {
     fs.cp(path.resolve(__dirname, "private-key.pem"), path.resolve(__dirname, "dist/key.pem"), () => {});
 }
 
-require('./src/meta/manifest.js');
+require('./src/meta/manifest.ts');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     mode: "development",
     devtool: "inline-source-map",
     entry: {
-        serviceWorker: "./src/entry/background/serviceWorker/serviceWorker.js",
-        popup: "./src/entry/foreground/popup/popup.js",
-        content: "./src/entry/foreground/content/content.js"
+        serviceWorker: "./src/entry/background/serviceWorker/serviceWorker.ts",
+        popup: "./src/entry/foreground/popup/popup.ts",
+        content: "./src/entry/foreground/content/content.ts"
+    },
+    resolve: {
+        extensions: [".ts", ".tsx", ".js", ".jsx"],
     },
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: [
                     "babel-loader",
