@@ -1,37 +1,10 @@
-// const webpack = require("webpack");
-// const path = require('path');
-// const childProcess = require('child_process');
-// const CopyPlugin = require("copy-webpack-plugin");
-// const fs = require('fs');
 import webpack from "webpack";
 import path from "path";
-import childProcess from "child_process";
 import CopyPlugin from "copy-webpack-plugin";
 import fs from "fs";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-
-function checkDoPublicAndPrivateKeysExist() {
-    const privateKeyExists = fs.existsSync(path.resolve(__dirname, "private-key.pem"));
-    const publicKeyExists = fs.existsSync(path.resolve(__dirname, "public-key-base64.txt"));
-    return privateKeyExists && publicKeyExists;
-}
-
-function generatePrivateKeySync() {
-    childProcess.execSync("openssl genrsa 2048 | openssl pkcs8 -topk8 -nocrypt -out private-key.pem", {
-        cwd: path.resolve(__dirname)
-    });
-}
-
-function generatePublicKeySync() {
-    childProcess.execSync("openssl rsa -in private-key.pem -pubout -outform DER | openssl base64 -A -out public-key-base64.txt", {
-        cwd: path.resolve(__dirname)
-    });
-}
-
-function generateKeypairSync() {
-    generatePrivateKeySync();
-    generatePublicKeySync();
-}
+import {generateKeypairSync} from "./util/generateKeypairSync";
+import {checkDoPublicAndPrivateKeysExist} from "./util/checkDoPublicAndPrivateKeysExist";
 
 if(!checkDoPublicAndPrivateKeysExist()) {
     generateKeypairSync();
