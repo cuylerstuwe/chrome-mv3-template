@@ -42,7 +42,7 @@ if(process.env.DEPLOY_MODE === 'initial-deploy') {
     fs.cpSync(path.resolve(__dirname, "private-key.pem"), path.resolve(__dirname, "dist/key.pem"));
 }
 
-require('./src/meta/manifest');
+require('./src/meta/generate-manifest');
 
 module.exports = {
     mode: process.env.NODE_ENV === "production" ? "production" : "development",

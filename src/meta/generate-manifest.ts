@@ -21,8 +21,7 @@ const iconsObj = Object.fromEntries(
     ))
 );
 
-const manifest = {
-
+const manifestTemplate = {
     key: (
         process.env.DEPLOY_MODE === "local-dev"
             ? localPublicKeyText
@@ -134,10 +133,9 @@ const manifest = {
         // "webRequest",
         // "webRequestBlocking"
     ]
-
 };
 
 fs.mkdirSync(path.resolve(__dirname, "../../dist"), {recursive: true});
-fs.writeFileSync(path.resolve(__dirname, "../../dist/manifest.json"), JSON.stringify(manifest), {
+fs.writeFileSync(path.resolve(__dirname, "../../dist/manifest.json"), JSON.stringify(manifestTemplate), {
 
 });
