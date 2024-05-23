@@ -20,15 +20,15 @@ if(process.env.DEPLOY_MODE === 'initial-deploy') {
     fs.writeFileSync(path.resolve(__dirname, "dist/key.pem"), privateKeyStr);
 }
 
-require('./src/meta/generate-manifest');
+require('./src/metadata/generate-manifest');
 
 module.exports = {
     mode: process.env.NODE_ENV === "production" ? "production" : "development",
     devtool: "inline-source-map",
     entry: {
-        serviceWorker: "./src/entry/background/serviceWorker/serviceWorker.ts",
-        popup: "./src/entry/foreground/popup/popup.ts",
-        content: "./src/entry/foreground/content/content.ts"
+        serviceWorker: "./src/background/serviceWorker/serviceWorker.ts",
+        popup: "./src/foreground/popup/popup.ts",
+        content: "./src/foreground/content/content.ts"
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx"],
@@ -54,13 +54,13 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, 'src/meta/icons/'),
+                    from: path.resolve(__dirname, 'src/metadata/icons/'),
                     to: path.resolve(__dirname, 'dist/icons/')
                 }
             ]
         }),
         new HtmlWebpackPlugin({
-            template: "src/entry/foreground/popup/popup.html",
+            template: "src/foreground/popup/popup.html",
             filename: "popup.html",
             chunks: ["popup"]
         })

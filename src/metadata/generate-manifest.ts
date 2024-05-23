@@ -5,8 +5,8 @@ import childProcess from "child_process";
 const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json")).toString();
 const packageJson = JSON.parse(packageJsonText);
 
-const localPublicKeyText = childProcess.execSync("sops --decrypt ../../public-key-base64.txt.enc", {
-    cwd: path.resolve(__dirname)
+const localPublicKeyText = childProcess.execSync("sops --decrypt public-key-base64.txt.enc", {
+    cwd: path.resolve(__dirname, "../../")
 }).toString();
 
 console.log({localPublicKeyText: localPublicKeyText});
