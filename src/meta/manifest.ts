@@ -1,7 +1,7 @@
-const fs = require("fs");
-const path = require("path");
+import fs from 'fs';
+import path from 'path';
 
-const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json"));
+const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json")).toString();
 const packageJson = JSON.parse(packageJsonText);
 
 const localPublicKeyText = fs.readFileSync(path.resolve(__dirname, "../../public-key-base64.txt"), "utf8");
@@ -43,13 +43,13 @@ const manifest = {
     },
 
     background: {
-        service_worker: "serviceWorker.ts"
+        service_worker: "serviceWorker.js"
     },
 
     content_scripts: [
         {
             matches: ["<all_urls>"], // TODO: Make this more specific, rather than the template default of matching everything.
-            js: ["content.ts"],
+            js: ["content.js"],
             // all_frames: true
         }
     ],
@@ -137,7 +137,7 @@ const manifest = {
 
 };
 
-fs.mkdir(path.resolve(__dirname, "../../dist"), {recursive: true}, () => {});
+fs.mkdirSync(path.resolve(__dirname, "../../dist"), {recursive: true});
 fs.writeFileSync(path.resolve(__dirname, "../../dist/manifest.json"), JSON.stringify(manifest), {
 
 });

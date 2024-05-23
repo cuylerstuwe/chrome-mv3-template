@@ -6,9 +6,9 @@
   "description": "",
   "license": "Private",
   "scripts": {
-    "build:local-dev": "cross-env-shell DEPLOY_MODE=local-dev \"webpack\"",
-    "build:updated-deploy": "cross-env-shell DEPLOY_MODE=updated-deploy \"webpack\"",
-    "build:initial-deploy": "cross-env-shell DEPLOY_MODE=initial-deploy \"webpack\"",
+    "build:local-dev": "cross-env-shell NODE_ENV=development BUILD_ENV=development DEPLOY_MODE=local-dev \"webpack\"",
+    "build:updated-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=updated-deploy \"webpack\"",
+    "build:initial-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=initial-deploy \"webpack\"",
     "test": "jest"
   },
   "devDependencies": {
@@ -18,12 +18,15 @@
     "@babel/preset-typescript": "^7.24.1",
     "@types/chrome": "*",
     "@types/jest": "*",
+    "@types/node": "^20.12.12",
+    "@types/webpack": "^5.28.5",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^12.0.2",
     "cross-env": "^7.0.3",
     "html-webpack-plugin": "^5.6.0",
     "jest": "^27.0.6",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2"

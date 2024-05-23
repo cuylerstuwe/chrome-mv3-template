@@ -1,8 +1,13 @@
-const webpack = require("webpack");
-const path = require('path');
-const childProcess = require('child_process');
-const CopyPlugin = require("copy-webpack-plugin");
-const fs = require('fs');
+// const webpack = require("webpack");
+// const path = require('path');
+// const childProcess = require('child_process');
+// const CopyPlugin = require("copy-webpack-plugin");
+// const fs = require('fs');
+import webpack from "webpack";
+import path from "path";
+import childProcess from "child_process";
+import CopyPlugin from "copy-webpack-plugin";
+import fs from "fs";
 
 function checkDoPublicAndPrivateKeysExist() {
     const privateKeyExists = fs.existsSync(path.resolve(__dirname, "private-key.pem"));
@@ -32,11 +37,11 @@ if(!checkDoPublicAndPrivateKeysExist()) {
 }
 
 if(process.env.DEPLOY_MODE === 'initial-deploy') {
-    fs.mkdir(path.resolve(__dirname, "dist"), {recursive: true}, () => {});
-    fs.cp(path.resolve(__dirname, "private-key.pem"), path.resolve(__dirname, "dist/key.pem"), () => {});
+    fs.mkdirSync(path.resolve(__dirname, "dist"), {recursive: true});
+    fs.cpSync(path.resolve(__dirname, "private-key.pem"), path.resolve(__dirname, "dist/key.pem"));
 }
 
-require('./src/meta/manifest.ts');
+require('./src/meta/manifest');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -63,13 +68,11 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            // "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-            "process.env": {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            },
-            "process.env.BUILD_ENV": JSON.stringify(process.env.BUILD_ENV)
-        }),
+        new webpack.DefinePlugin(Object.fromEntries(Object.entries({
+            "process.env.BUILD_ENV": JSON.stringify(process.env.BUILD_ENV),
+            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+            "process.env.DEPLOY_MODE": JSON.stringify(process.env.DEPLOY_MODE)
+        }).filter(([k,v]) => v !== undefined))),
         new CopyPlugin({
             patterns: [
                 {
