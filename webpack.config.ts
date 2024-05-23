@@ -7,6 +7,7 @@ import {checkDoPublicAndPrivateKeysExist} from "./util/checkDoPublicAndPrivateKe
 import {injectPrivateKeyIntoWebpackOutputFolder} from "./util/injectPrivateKeyIntoWebpackOutputFolder";
 import {withEntriesWithFalsyValuesStripped} from "./util/withEntriesWithFalsyValuesStripped";
 import {computeNameForWebpackOutputFolder} from "./util/computeNameForWebpackOutputFolder";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
 const nameForWebpackOutputFolder = computeNameForWebpackOutputFolder();
 
@@ -48,6 +49,15 @@ module.exports = {
         ]
     },
     plugins: [
+        new ForkTsCheckerWebpackPlugin({
+            typescript: {
+                diagnosticOptions: {
+                    semantic: true,
+                    syntactic: true,
+                },
+                mode: "write-references",
+            }
+        }),
         new webpack.DefinePlugin(withEntriesWithFalsyValuesStripped({
             "process.env.BUILD_ENV": JSON.stringify(process.env.BUILD_ENV),
             "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
