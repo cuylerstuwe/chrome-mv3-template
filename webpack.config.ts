@@ -1,30 +1,25 @@
 import webpack from "webpack";
 import path from "path";
 import CopyPlugin from "copy-webpack-plugin";
-import fs from "fs";
-import childProcess from "child_process";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import {generateKeypairSync} from "./util/generateKeypairSync";
 import {checkDoPublicAndPrivateKeysExist} from "./util/checkDoPublicAndPrivateKeysExist";
+import {injectPrivateKeyIntoDistFolder} from "./util/injectPrivateKeyIntoDistFolder";
+import {withEntriesWithFalsyValuesStripped} from "./util/withEntriesWithFalsyValuesStripped";
 
 if(!checkDoPublicAndPrivateKeysExist()) {
     generateKeypairSync();
 }
 
 if(process.env.DEPLOY_MODE === 'initial-deploy') {
-    const privateKeyStr = childProcess.execSync("sops --decrypt private-key.pem.enc", {
-        cwd: path.resolve(__dirname)
-    }).toString();
-
-    fs.mkdirSync(path.resolve(__dirname, "dist"), {recursive: true});
-    fs.writeFileSync(path.resolve(__dirname, "dist/key.pem"), privateKeyStr);
+    injectPrivateKeyIntoDistFolder();
 }
 
 require('./src/metadata/generate-manifest');
 
 module.exports = {
     mode: process.env.NODE_ENV === "production" ? "production" : "development",
-    devtool: "inline-source-map",
+    devtool: process.env.NODE_ENV !== "production" ? "inline-source-map" : undefined,
     entry: {
         serviceWorker: "./src/background/serviceWorker/serviceWorker.ts",
         popup: "./src/foreground/popup/popup.ts",
@@ -46,11 +41,11 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.DefinePlugin(Object.fromEntries(Object.entries({
+        new webpack.DefinePlugin(withEntriesWithFalsyValuesStripped({
             "process.env.BUILD_ENV": JSON.stringify(process.env.BUILD_ENV),
             "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
             "process.env.DEPLOY_MODE": JSON.stringify(process.env.DEPLOY_MODE)
-        }).filter(([k,v]) => v !== undefined))),
+        })),
         new CopyPlugin({
             patterns: [
                 {
