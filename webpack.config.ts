@@ -8,6 +8,7 @@ import path from "path";
 import childProcess from "child_process";
 import CopyPlugin from "copy-webpack-plugin";
 import fs from "fs";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
 function checkDoPublicAndPrivateKeysExist() {
     const privateKeyExists = fs.existsSync(path.resolve(__dirname, "private-key.pem"));
@@ -42,10 +43,9 @@ if(process.env.DEPLOY_MODE === 'initial-deploy') {
 }
 
 require('./src/meta/manifest');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    mode: "development",
+    mode: process.env.NODE_ENV === "production" ? "production" : "development",
     devtool: "inline-source-map",
     entry: {
         serviceWorker: "./src/entry/background/serviceWorker/serviceWorker.ts",
