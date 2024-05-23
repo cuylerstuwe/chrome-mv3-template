@@ -1,1 +1,1 @@
-console.log("Started.");
+console.log("Extension context started.");

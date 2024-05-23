@@ -1,11 +1,13 @@
 const fs = require("fs");
+const path = require("path");
 
-const packageJsonText = fs.readFileSync("../package.json");
+const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../../package.json"));
 const packageJson = JSON.parse(packageJsonText);
 
-const localPublicKeyText = fs.readFileSync("../public-key-base64.txt", "utf8");
+const localPublicKeyText = fs.readFileSync(path.resolve(__dirname, "../../public-key-base64.txt"), "utf8");
+
 console.log({localPublicKeyText});
-console.log("Build environment:", {BUILD_ENV: process.env.BUILD_ENV, NODE_ENV: process.env.NODE_ENV});
+console.log("Build environment:", {BUILD_ENV: process.env.BUILD_ENV, DEPLOY_MODE: process.env.DEPLOY_MODE, NODE_ENV: process.env.NODE_ENV});
 
 const iconSizes = [16, 32, 48, 64];
 
@@ -22,7 +24,7 @@ const iconsObj = Object.fromEntries(
 const manifest = {
 
     key: (
-        process.env.BUILD_ENV === "local-dev"
+        process.env.DEPLOY_MODE === "local-dev"
             ? localPublicKeyText
             : undefined
     ),
@@ -135,4 +137,7 @@ const manifest = {
 
 };
 
-fs.writeFileSync("../dist/manifest.json", JSON.stringify(manifest));
+fs.mkdir(path.resolve(__dirname, "../../dist"), {recursive: true}, () => {});
+fs.writeFileSync(path.resolve(__dirname, "../../dist/manifest.json"), JSON.stringify(manifest), {
+
+});
