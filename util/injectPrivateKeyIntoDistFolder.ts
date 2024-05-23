@@ -4,7 +4,7 @@ import fs from "fs";
 
 export function injectPrivateKeyIntoDistFolder() {
     const privateKeyStr = childProcess.execSync("sops --decrypt private-key.pem.enc", {
-        cwd: path.resolve(__dirname)
+        cwd: path.resolve(__dirname, "../")
     }).toString();
 
     fs.mkdirSync(path.resolve(__dirname, "../dist"), {recursive: true});
