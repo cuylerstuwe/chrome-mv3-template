@@ -6,6 +6,6 @@ export function sendMessageToBackground<K extends HandlerNames>(
 	...args: HandlerParams[K]
 ): Promise<ReturnType<(typeof handlers)[K]>> {
 	return new Promise((resolve) => {
-		chrome.runtime.sendMessage({ type, args }, resolve);
+		chrome.runtime.sendMessage({ type, args } as MessageFromForeground, resolve);
 	});
 }
