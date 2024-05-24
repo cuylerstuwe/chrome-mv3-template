@@ -1,5 +1,5 @@
 import "../../shared/utils/startedLog";
-import { handlers } from "../handlers/handlers";
+import { handlers } from "./handlers";
 import type { HandlerNames, HandlerParams, MessageFromForeground } from "../../shared/types/messageFromForegroundTypes";
 
 async function handleMessage(type: HandlerNames, args: HandlerParams[HandlerNames]) {
