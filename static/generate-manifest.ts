@@ -140,9 +140,9 @@ const manifestTemplate = {
 	],
 };
 
-fs.mkdirSync(path.resolve(__dirname, `../../${nameForWebpackOutputFolder}`), { recursive: true });
+fs.mkdirSync(path.resolve(__dirname, `../${nameForWebpackOutputFolder}`), { recursive: true });
 fs.writeFileSync(
-	path.resolve(__dirname, `../../${nameForWebpackOutputFolder}/manifest.json`),
+	path.resolve(__dirname, `../${nameForWebpackOutputFolder}/manifest.json`),
 	JSON.stringify(manifestTemplate),
 	{},
 );
