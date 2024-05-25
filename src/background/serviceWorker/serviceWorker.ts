@@ -1,5 +1,5 @@
 import "shared/utils/startedLog";
-import { handlers } from "./handlers";
+import { handlers } from "background/serviceWorker/handlers";
 import type { HandlerNames, HandlerParams, MessageFromForeground } from "shared/types/messageFromForeground";
 
 async function handleMessage(type: HandlerNames, args: HandlerParams[HandlerNames]) {

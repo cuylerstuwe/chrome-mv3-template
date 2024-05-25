@@ -1,9 +1,7 @@
-import { noop } from "background/handlers/noop";
-import { sumTwoNumbers } from "background/handlers/sumTwoNumbers";
+import * as bundledHandlerImports from "background/handlers";
 
 export const handlers = {
-	noop,
-	sumTwoNumbers,
+	...bundledHandlerImports,
 };
 
 export type handlers = typeof handlers;
