@@ -71,7 +71,7 @@ const WorldTime = z.object({
 
 type WorldTime = z.infer<typeof WorldTime>;
 
-export type WorldTimeEndpoint = "ip" | `timezome/${string}/${string}` | `timezone/${string}/${string}/${string}`;
+export type WorldTimeEndpoint = "ip" | `timezone/${string}/${string}` | `timezone/${string}/${string}/${string}`;
 
 /**
  * A simple API to get the current time based on
