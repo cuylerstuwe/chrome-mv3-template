@@ -30,7 +30,7 @@ const WorldTime = z.object({
 	 * An ISO8601-valid string representing the datetime
 	 * when daylight savings started for this timezone.
 	 */
-	dst_from: z.string(),
+	dst_from: z.string().nullable(),
 	/**
 	 * The difference in seconds between the current local time
 	 * and daylight savings time for this location.
@@ -40,7 +40,7 @@ const WorldTime = z.object({
 	 * An ISO8601-valid string representing the datetime
 	 * when daylight savings will end for this timezone.
 	 */
-	dst_until: z.string(),
+	dst_until: z.string().nullable(),
 	/**
 	 * The difference in seconds between the current local time
 	 * and the time in UTC,
