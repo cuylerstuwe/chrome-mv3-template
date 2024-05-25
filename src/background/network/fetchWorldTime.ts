@@ -12,7 +12,7 @@ const WorldTime = z.object({
 	/**
 	 * An ISO8601-valid string representing the current local date/time.
 	 */
-	datetime: z.string().datetime(),
+	datetime: z.string(),
 	/**
 	 * Current day number of the week, where sunday is 0 and saturday is 6.
 	 */
@@ -30,7 +30,7 @@ const WorldTime = z.object({
 	 * An ISO8601-valid string representing the datetime
 	 * when daylight savings started for this timezone.
 	 */
-	dst_from: z.string().datetime(),
+	dst_from: z.string(),
 	/**
 	 * The difference in seconds between the current local time
 	 * and daylight savings time for this location.
@@ -40,7 +40,7 @@ const WorldTime = z.object({
 	 * An ISO8601-valid string representing the datetime
 	 * when daylight savings will end for this timezone.
 	 */
-	dst_until: z.string().datetime(),
+	dst_until: z.string(),
 	/**
 	 * The difference in seconds between the current local time
 	 * and the time in UTC,
@@ -58,7 +58,7 @@ const WorldTime = z.object({
 	/**
 	 * An ISO8601-valid string representing the current date/time in UTC.
 	 */
-	utc_datetime: z.string().datetime(),
+	utc_datetime: z.string(),
 	/**
 	 * An ISO8601-valid string representing the offset from UTC.
 	 */
@@ -79,10 +79,16 @@ export type WorldTimeEndpoint = "ip" | `timezone/${string}/${string}` | `timezon
  * @param endpoint
  * @see https://worldtimeapi.org/api
  */
-export async function fetchWorldTime(endpoint: WorldTimeEndpoint = "ip"): Promise<WorldTime> {
-	const urlBase = "https://worldtimeapi.org/api";
-	const response = await fetch(`${urlBase}/${endpoint}`);
-	const data = await response.json();
-	WorldTime.parse(data);
-	return data as WorldTime;
+export async function fetchWorldTime(endpoint: WorldTimeEndpoint = "ip"): Promise<WorldTime | undefined> {
+	try {
+		const urlBase = "https://worldtimeapi.org/api";
+		const response = await fetch(`${urlBase}/${endpoint}`);
+		const data = await response.json();
+		WorldTime.parse(data);
+		return data as WorldTime;
+	} catch (error: unknown) {
+		if (error instanceof z.ZodError) {
+			console.error(error.errors);
+		}
+	}
 }
