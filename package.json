@@ -38,5 +38,8 @@
     "typescript": "^5.4.5",
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
   }
 }
