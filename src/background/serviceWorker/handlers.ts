@@ -1,5 +1,5 @@
-import { noop } from "../handlers/noop";
-import { sumTwoNumbers } from "../handlers/sumTwoNumbers";
+import { noop } from "background/handlers/noop";
+import { sumTwoNumbers } from "background/handlers/sumTwoNumbers";
 
 export const handlers = {
 	noop,

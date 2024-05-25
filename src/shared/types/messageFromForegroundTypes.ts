@@ -1,4 +1,4 @@
-import type { handlers } from "../../background/serviceWorker/handlers";
+import type { handlers } from "background/serviceWorker/handlers";
 
 export type HandlerNames = keyof typeof handlers;
 

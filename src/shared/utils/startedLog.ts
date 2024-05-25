@@ -1,4 +1,4 @@
-import { config } from "../../config";
+import { config } from "config";
 
 if (config.SHOULD_SHOW_STARTED_LOG) {
 	console.groupCollapsed(`Extension context for ${chrome.runtime.getManifest().name} started.`);

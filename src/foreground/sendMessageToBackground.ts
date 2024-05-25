@@ -1,5 +1,5 @@
-import type { handlers } from "../background/serviceWorker/handlers";
-import type { HandlerNames, HandlerParams, MessageFromForeground } from "../shared/types/messageFromForegroundTypes";
+import type { handlers } from "background/serviceWorker/handlers";
+import type { HandlerNames, HandlerParams, MessageFromForeground } from "shared/types/messageFromForegroundTypes";
 
 export function sendMessageToBackground<K extends HandlerNames>(
 	type: K,

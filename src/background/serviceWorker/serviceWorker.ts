@@ -1,6 +1,6 @@
-import "../../shared/utils/startedLog";
+import "shared/utils/startedLog";
 import { handlers } from "./handlers";
-import type { HandlerNames, HandlerParams, MessageFromForeground } from "../../shared/types/messageFromForegroundTypes";
+import type { HandlerNames, HandlerParams, MessageFromForeground } from "shared/types/messageFromForegroundTypes";
 
 async function handleMessage(type: HandlerNames, args: HandlerParams[HandlerNames]) {
 	const handler = handlers[type];

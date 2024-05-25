@@ -1,6 +1,7 @@
 const eslintPluginPrettier = require("eslint-plugin-prettier");
 const tsParser = require('@typescript-eslint/parser');
 const tsPlugin = require('@typescript-eslint/eslint-plugin');
+const noRelativeImportPaths = require("eslint-plugin-no-relative-import-paths");
 
 module.exports = [
 	{
@@ -10,6 +11,7 @@ module.exports = [
 		},
 		rules: {
 			"prettier/prettier": "error",
+			"sort-imports": "error",
 		},
 	},
 	{
@@ -20,9 +22,18 @@ module.exports = [
 		plugins: {
 			"@typescript-eslint": tsPlugin,
 			"prettier": eslintPluginPrettier,
+			"no-relative-import-paths": noRelativeImportPaths,
 		},
 		rules: {
 			"prettier/prettier": "error",
+			"sort-imports": ["error", {
+				ignoreDeclarationSort: true,
+			}],
+			"no-relative-import-paths/no-relative-import-paths": ["error", {
+				allowSameFolder: true,
+				rootDir: "src",
+				prefix: "",
+			}],
 		},
 	},
 ];
