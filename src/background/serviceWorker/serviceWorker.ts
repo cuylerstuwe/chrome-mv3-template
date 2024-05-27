@@ -2,7 +2,7 @@ import "shared/utils/startedLog";
 import { listeners } from "background/serviceWorker/listeners";
 import type { ListenerNames, ListenerParams, MessageFromForeground } from "shared/types/messageFromForeground";
 
-async function respondTo(type: ListenerNames, args: ListenerParams[ListenerNames]) {
+async function routeMessage(type: ListenerNames, args: ListenerParams[ListenerNames]) {
 	const correspondingListener = listeners[type];
 	if (correspondingListener) {
 		// I don't know how to type this properly right now, and it doesn't really matter.
@@ -16,7 +16,7 @@ async function respondTo(type: ListenerNames, args: ListenerParams[ListenerNames
 
 chrome.runtime.onMessage.addListener((message: MessageFromForeground, sender, sendResponse) => {
 	try {
-		respondTo(message.type, message.args).then(sendResponse);
+		routeMessage(message.type, message.args).then(sendResponse);
 	} catch (e) {
 		console.error(e);
 	}
