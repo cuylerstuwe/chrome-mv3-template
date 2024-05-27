@@ -6,7 +6,7 @@ async function routeMessage(type: ListenerNames, args: ListenerParams[ListenerNa
 	const correspondingListener = listeners[type];
 	if (correspondingListener) {
 		// I don't know how to type this properly right now, and it doesn't really matter.
-		// The type contract is enforced by sendMessageToBackground regardless.
+		// The type contract is enforced by dispatchToBg regardless.
 		// @ts-ignore
 		return correspondingListener(...args);
 	} else {
