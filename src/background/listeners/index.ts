@@ -5,5 +5,5 @@
  * and will be typed and callable from foreground scripts.
  */
 
-export { sumTwoNumbers } from "./implementations/sumTwoNumbers";
-export { fetchWorldTime } from "./implementations/fetchWorldTime";
+export { sumTwoNumbers } from "./functions/sumTwoNumbers";
+export { fetchWorldTime } from "./functions/fetchWorldTime";
