@@ -9,7 +9,7 @@ type SnakeToCamelCaseKeys<T> = {
 	[K in keyof T as SnakeToCamelCase<K & string>]: T[K];
 };
 
-export type WorldTime = SnakeToCamelCaseKeys<RawWorldTime>;
+export type WorldTime = SnakeToCamelCaseKeys<RawWorldTime> & { asFormattedTime: string };
 
 /**
  * Provided as a simple demo of how we should implement a listener that fetches network data.
@@ -37,6 +37,13 @@ export async function fetchWorldTime(endpoint: WorldTimeEndpoint = "ip"): Promis
 			utcDatetime: responsePayload.utc_datetime,
 			utcOffset: responsePayload.utc_offset,
 			weekNumber: responsePayload.week_number,
+			/**
+			 * Render the time in the format the user is most likely to understand.
+			 */
+			asFormattedTime: (() => {
+				const date = new Date(responsePayload.utc_datetime);
+				return date.toLocaleString();
+			})(),
 		};
 		return worldTime;
 	}
