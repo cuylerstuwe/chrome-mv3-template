@@ -7,6 +7,6 @@
  * @param a The first number.
  * @param b The second number.
  */
-export async function sumTwoNumbers(a: number, b: number) {
+export async function addTwoNumbers(a: number, b: number) {
 	return a + b;
 }

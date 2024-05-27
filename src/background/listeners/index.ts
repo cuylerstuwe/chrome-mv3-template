@@ -5,5 +5,5 @@
  * From there, they'll be callable from foreground scripts, and typed throughout the entire project source.
  */
 
-export { sumTwoNumbers } from "./functions/sumTwoNumbers";
+export { addTwoNumbers } from "./functions/addTwoNumbers";
 export { fetchWorldTime } from "./functions/fetchWorldTime";
