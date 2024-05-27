@@ -69,7 +69,7 @@ const WorldTime = z.object({
 	week_number: z.number().lt(53),
 });
 
-type WorldTime = z.infer<typeof WorldTime>;
+export type WorldTime = z.infer<typeof WorldTime>;
 
 export type WorldTimeEndpoint = "ip" | `timezone/${string}/${string}` | `timezone/${string}/${string}/${string}`;
 
