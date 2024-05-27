@@ -4,4 +4,4 @@ export const allEnabledListeners = {
 	...allListenerImports,
 };
 
-export type listeners = typeof allEnabledListeners;
+export type allEnabledListeners = typeof allEnabledListeners;
