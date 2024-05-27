@@ -1,12 +1,12 @@
-import type { handlers } from "background/serviceWorker/handlers";
+import type { listeners } from "background/serviceWorker/listeners";
 
-export type HandlerNames = keyof typeof handlers;
+export type ListenerNames = keyof typeof listeners;
 
-export type HandlerParams = {
-	[key in HandlerNames]: Parameters<(typeof handlers)[key]>;
+export type ListenerParams = {
+	[key in ListenerNames]: Parameters<(typeof listeners)[key]>;
 };
 
 export type MessageFromForeground = {
-	type: HandlerNames;
-	args: HandlerParams[HandlerNames];
+	type: ListenerNames;
+	args: ListenerParams[ListenerNames];
 };

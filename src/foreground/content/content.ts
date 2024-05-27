@@ -1,11 +1,11 @@
 import "shared/utils/startedLog";
-import { sendMessageToBackground } from "foreground/utils/sendMessageToBackground";
+import { dispatchToBg } from "foreground/utils/dispatchToBg";
 
 async function main() {
-	const myTime = await sendMessageToBackground("fetchWorldTime", "ip");
+	const myTime = await dispatchToBg("fetchWorldTime", "ip");
 	console.log("The current time for me is", myTime?.utc_datetime);
 
-	const tokyoTime = await sendMessageToBackground("fetchWorldTime", "timezone/Asia/Tokyo");
+	const tokyoTime = await dispatchToBg("fetchWorldTime", "timezone/Asia/Tokyo");
 	console.log("The current time in Tokyo is:", tokyoTime?.utc_datetime);
 }
 

@@ -1,22 +1,22 @@
 import "shared/utils/startedLog";
-import { handlers } from "background/serviceWorker/handlers";
-import type { HandlerNames, HandlerParams, MessageFromForeground } from "shared/types/messageFromForeground";
+import { listeners } from "background/serviceWorker/listeners";
+import type { ListenerNames, ListenerParams, MessageFromForeground } from "shared/types/messageFromForeground";
 
-async function handleMessage(type: HandlerNames, args: HandlerParams[HandlerNames]) {
-	const handler = handlers[type];
-	if (handler) {
+async function respondTo(type: ListenerNames, args: ListenerParams[ListenerNames]) {
+	const correspondingListener = listeners[type];
+	if (correspondingListener) {
 		// I don't know how to type this properly right now, and it doesn't really matter.
 		// The type contract is enforced by sendMessageToBackground regardless.
 		// @ts-ignore
-		return handler(...args);
+		return correspondingListener(...args);
 	} else {
-		throw new Error(`Handler not found: ${type}`);
+		throw new Error(`Listener not found: ${type}`);
 	}
 }
 
 chrome.runtime.onMessage.addListener((message: MessageFromForeground, sender, sendResponse) => {
 	try {
-		handleMessage(message.type, message.args).then(sendResponse);
+		respondTo(message.type, message.args).then(sendResponse);
 	} catch (e) {
 		console.error(e);
 	}
