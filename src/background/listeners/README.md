@@ -8,7 +8,7 @@ Each file should contain exactly one named export, which should be an async func
 
 The name of this function will become enforced by Typescript as the name of the message dispatched from the foreground.
 
-The filename should match the name of this named export.
+As a convention for consistency's sake, the filename should match the name of this named export _(including casing)_.
 
 ## Notes
 
