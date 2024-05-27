@@ -83,9 +83,9 @@ export async function fetchWorldTime(endpoint: WorldTimeEndpoint = "ip"): Promis
 	try {
 		const urlBase = "https://worldtimeapi.org/api";
 		const response = await fetch(`${urlBase}/${endpoint}`);
-		const data = await response.json();
-		WorldTime.parse(data);
-		return data as WorldTime;
+		const responsePayload = await response.json();
+		WorldTime.parse(responsePayload);
+		return responsePayload as WorldTime;
 	} catch (error: unknown) {
 		if (error instanceof z.ZodError) {
 			console.error(error.errors);
