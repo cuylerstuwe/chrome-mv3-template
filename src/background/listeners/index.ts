@@ -1,5 +1,5 @@
 /**
- * This is a barrel file that exports all of the listeners.
+ * This is a barrel file that exports every listener.
  */
 
 export { sumTwoNumbers } from "./implementations/sumTwoNumbers";

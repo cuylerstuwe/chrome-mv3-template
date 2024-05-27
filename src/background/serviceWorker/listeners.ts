@@ -1,7 +1,7 @@
-import * as bundledHandlerImports from "background/listeners";
+import * as allListenerImports from "background/listeners";
 
 export const listeners = {
-	...bundledHandlerImports,
+	...allListenerImports,
 };
 
 export type listeners = typeof listeners;
