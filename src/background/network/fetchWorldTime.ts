@@ -69,7 +69,7 @@ const WorldTime = z.object({
 	week_number: z.number().lt(53),
 });
 
-export type WorldTime = z.infer<typeof WorldTime>;
+export type RawWorldTime = z.infer<typeof WorldTime>;
 
 export type WorldTimeEndpoint = "ip" | `timezone/${string}/${string}` | `timezone/${string}/${string}/${string}`;
 
@@ -79,13 +79,13 @@ export type WorldTimeEndpoint = "ip" | `timezone/${string}/${string}` | `timezon
  * @param endpoint
  * @see https://worldtimeapi.org/api
  */
-export async function fetchWorldTime(endpoint: WorldTimeEndpoint = "ip"): Promise<WorldTime | undefined> {
+export async function fetchWorldTime(endpoint: WorldTimeEndpoint = "ip"): Promise<RawWorldTime | undefined> {
 	try {
 		const urlBase = "https://worldtimeapi.org/api";
 		const response = await fetch(`${urlBase}/${endpoint}`);
 		const responsePayload = await response.json();
 		WorldTime.parse(responsePayload);
-		return responsePayload as WorldTime;
+		return responsePayload as RawWorldTime;
 	} catch (error: unknown) {
 		if (error instanceof z.ZodError) {
 			console.error(error.errors);
