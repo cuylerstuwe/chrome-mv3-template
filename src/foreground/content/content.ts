@@ -1,4 +1,4 @@
-import "shared/utils/startedLog";
+import "shared/utils/logBootupDiagnostics";
 import { dispatchToBg } from "foreground/utils/dispatchToBg";
 
 async function main() {

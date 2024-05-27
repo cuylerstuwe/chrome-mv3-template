@@ -1,4 +1,4 @@
-import "shared/utils/startedLog";
+import "shared/utils/logBootupDiagnostics";
 import { listeners } from "background/serviceWorker/listeners";
 import type { ListenerNames, ListenerParams, MessageFromForeground } from "shared/types/messageFromForeground";
 
