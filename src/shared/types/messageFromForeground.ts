@@ -1,9 +1,9 @@
-import type { listeners } from "background/serviceWorker/listeners";
+import type { allEnabledListeners } from "background/serviceWorker/allEnabledListeners";
 
-export type ListenerNames = keyof typeof listeners;
+export type ListenerNames = keyof typeof allEnabledListeners;
 
 export type ListenerParams = {
-	[key in ListenerNames]: Parameters<(typeof listeners)[key]>;
+	[key in ListenerNames]: Parameters<(typeof allEnabledListeners)[key]>;
 };
 
 export type MessageFromForeground = {

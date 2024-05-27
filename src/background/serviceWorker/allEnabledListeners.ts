@@ -1,7 +1,7 @@
 import * as allListenerImports from "background/listeners";
 
-export const listeners = {
+export const allEnabledListeners = {
 	...allListenerImports,
 };
 
-export type listeners = typeof listeners;
+export type listeners = typeof allEnabledListeners;
