@@ -9,7 +9,8 @@
     "build:local-dev": "cross-env-shell NODE_ENV=development BUILD_ENV=development DEPLOY_MODE=local-dev \"webpack\"",
     "build:updated-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=updated-deploy \"webpack\"",
     "build:initial-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=initial-deploy \"webpack\"",
-    "test": "jest"
+    "test": "jest",
+    "e2e": "node e2e/setup/init.js"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
@@ -24,6 +25,7 @@
     "@typescript-eslint/parser": "^7.10.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
+    "chai": "^5.1.1",
     "copy-webpack-plugin": "^12.0.2",
     "cross-env": "^7.0.3",
     "eslint": "^9.3.0",
@@ -34,6 +36,11 @@
     "html-webpack-plugin": "^5.6.0",
     "jest": "^27.0.6",
     "prettier": "^3.2.5",
+    "puppeteer": "^22.10.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-adblocker": "^2.13.6",
+    "puppeteer-extra-plugin-recaptcha": "^3.6.8",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "webpack": "^5.45.1",
