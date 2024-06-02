@@ -1,11 +1,11 @@
 import "shared/utils/logBootupDiagnostics";
-import { dispatchToBg } from "foreground/utils/dispatchToBg";
+import { dispatch } from "foreground/utils/dispatch";
 
 async function main() {
-	const myTime = await dispatchToBg("fetchWorldTime");
+	const myTime = await dispatch("fetchWorldTime");
 	console.log("The current time for me is", myTime?.asFormattedTime);
 
-	const tokyoTime = await dispatchToBg("fetchWorldTime", "timezone/Asia/Tokyo");
+	const tokyoTime = await dispatch("fetchWorldTime", "timezone/Asia/Tokyo");
 	console.log("The current time in Tokyo is:", tokyoTime?.utcDatetime);
 }
 
