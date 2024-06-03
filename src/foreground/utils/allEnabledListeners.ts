@@ -1,9 +1,7 @@
 import * as allListenerImports from "background/listeners";
 
 export const allEnabledListeners = {
-	...allListenerImports,
+    ...allListenerImports,
 };
 
 export type allEnabledListeners = typeof allEnabledListeners;
-
-export type AllListenerShapes = allEnabledListeners[keyof allEnabledListeners];

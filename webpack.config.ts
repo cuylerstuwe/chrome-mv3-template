@@ -35,7 +35,10 @@ module.exports = {
 	},
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".jsx"],
-		modules: ["node_modules", path.resolve(__dirname, "src")],
+		modules: ["node_modules", path.resolve(__dirname, "src"), path.resolve(__dirname, "temp")],
+		alias: {
+			'foreground/utils/allEnabledListeners': 'remappedAllEnabledListeners',
+		}
 	},
 	module: {
 		rules: [
