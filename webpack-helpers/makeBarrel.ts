@@ -1,0 +1,30 @@
+const fs = require('fs');
+const path = require('path');
+
+const listenerFilenames = fs.readdirSync(path.resolve(__dirname, "../src/background/listeners/functions"));
+
+const listenerFunctionNames = listenerFilenames.map((filename: string) => (
+    filename.match(/(.*)\.ts$/)?.[1]
+));
+
+const generatedBarrelFile = `
+/**
+ * THIS IS A GENERATED FILE. DO NOT MODIFY DIRECTLY.
+ *
+ * This is a barrel file that exports every listener.
+ *
+ * Whichever listeners are exported here will be spread into allEnabledListeners.
+ * From there, they'll be callable from foreground scripts, and typed throughout the entire project source.
+ */
+ 
+${listenerFunctionNames.map((listenerFunctionName: string) => (
+    `export { ${listenerFunctionName} } from "./functions/${listenerFunctionName}";`
+)).join("\n")}
+`
+
+fs.cpSync(path.resolve(__dirname, "../src/background/listeners/index.ts"), path.resolve(__dirname, "../src/background/listeners/index.ts.backup"));
+
+fs.writeFileSync(path.resolve(__dirname, "../src/background/listeners/index.ts"), generatedBarrelFile, { encoding: "utf-8" });
+
+console.log('wrote new barrel file:');
+console.log(generatedBarrelFile);
