@@ -6,7 +6,6 @@
   "description": "",
   "license": "Private",
   "scripts": {
-    "render-listeners-remapping": "ts-node temp/render-listeners-remapping.ts",
     "build:base": "webpack --config webpack-helpers/remappingScripts/webpack.config.ts && node temp/renderListenersRemappingPrinter.js > temp/remappedAllEnabledListeners.ts && webpack && rm -rf temp",
     "build:local-dev": "cross-env-shell NODE_ENV=development BUILD_ENV=development DEPLOY_MODE=local-dev \"npm run build:base\"",
     "build:updated-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=updated-deploy \"npm run build:base\"",

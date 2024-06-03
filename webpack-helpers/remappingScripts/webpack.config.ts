@@ -13,9 +13,6 @@ module.exports = {
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".jsx"],
 		modules: ["node_modules", path.resolve(__dirname, "../../src")],
-		alias: {
-			'foreground/utils/allEnabledListeners': 'temp/allEnabledListenersRemapping',
-		}
 	},
 	module: {
 		rules: [

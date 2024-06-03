@@ -1,5 +1,4 @@
-import type { allEnabledListeners, AllListenerShapes } from "background/serviceWorker/allEnabledListeners";
-import type { ListenerNames, ListenerParams, MessageFromForeground } from "shared/types/messageFromForeground";
+import type { AllListenerShapes } from "background/serviceWorker/allEnabledListeners";
 
 export function dispatch<K extends AllListenerShapes>(type: K, ...args: Parameters<K>) {
 	return new Promise((resolve) => {

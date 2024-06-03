@@ -37,7 +37,7 @@ module.exports = {
 		extensions: [".ts", ".tsx", ".js", ".jsx"],
 		modules: ["node_modules", path.resolve(__dirname, "src"), path.resolve(__dirname, "temp")],
 		alias: {
-			'foreground/utils/allEnabledListeners': 'remappedAllEnabledListeners',
+			'foreground/utils/allMessageTypes': 'remappedAllEnabledListeners',
 		}
 	},
 	module: {
