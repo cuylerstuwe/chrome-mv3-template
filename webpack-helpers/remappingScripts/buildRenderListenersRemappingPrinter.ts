@@ -37,7 +37,13 @@ function mapFnToChromeRuntimeSendMessage(fn: any) {
 	const fullStr = `
         (${labeledFinishedParamsAsCombinedStr}) => {
             return new Promise((resolve) => {
-                chrome.runtime.sendMessage({ type: "${fn.name}", args: [${nonlabeledFinishedParamsAsCombinedStr}] }, resolve);
+                chrome.runtime.sendMessage({ type: "${fn.name}", args: [${nonlabeledFinishedParamsAsCombinedStr}] }, (response) => {
+                	const maybeError = chrome.runtime.lastError;
+                	if(maybeError) {
+                		throw new Error(maybeError.message);
+                	}
+                	return resolve(response);
+                });
             });
         }`;
 
