@@ -1,12 +1,12 @@
 import "shared/utils/logBootupDiagnostics";
-import {dispatch} from "foreground/utils/dispatch";
 
-import { allMessageTypes as msg } from "foreground/utils/allMessageTypes";
+import { allMessageTypes } from "foreground/utils/allMessageTypes";
+
+const { fetchWorldTime } = allMessageTypes;
 
 async function main() {
-    const myTime = await msg.fetchWorldTime();
-    console.log('it worked', myTime);
+    const myTime = await fetchWorldTime();
+    console.log('the time in my timezone is', myTime);
 }
 
-main().then(() => {
-});
+main().then(() => {});
