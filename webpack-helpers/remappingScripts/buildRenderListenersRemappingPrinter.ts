@@ -1,7 +1,67 @@
-import {allMessageTypes} from "../../src/foreground/utils/allMessageTypes";
+import { dispatcher } from "../../src/foreground/utils/dispatcher";
 
-const keys = Object.keys(allMessageTypes);
-const obj = Object.fromEntries(keys.map(key => [key, key]));
-const objAsString = JSON.stringify(obj, null, 4);
+function $params(func: any) {
+	return (func + "")
+		.replace(/[/][/].*$/gm, "") // strip single-line comments
+		.replace(/\s+/g, "") // strip white space
+		.replace(/[/][*][^/*]*[*][/]/g, "") // strip multi-line comments
+		.split("){", 1)[0]
+		.replace(/^[^(]*[(]/, "") // extract the parameters
+		.replace(/=[^,]+/g, "") // strip any ES6 defaults
+		.split(",")
+		.filter(Boolean); // split & filter [""]
+}
 
-console.log(`export const allMessageTypes = ${objAsString};\n`);
+function $paramsWithDefaults(func: any) {
+	return (func + "")
+		.replace(/[/][/].*$/gm, "") // strip single-line comments
+		.replace(/\s+/g, "") // strip white space
+		.replace(/[/][*][^/*]*[*][/]/g, "") // strip multi-line comments
+		.split("){", 1)[0]
+		.replace(/^[^(]*[(]/, "") // extract the parameters
+		.split(",")
+		.filter(Boolean); // split & filter [""]
+}
+
+function mapFnToChromeRuntimeSendMessage(fn: any) {
+	const params = $params(fn);
+	const paramsWithDefaults = $paramsWithDefaults(fn)!;
+	const paramsLabeledAsAnyType = paramsWithDefaults.map((param: string) =>
+		!param.includes("=") ? `${param}: any` : param,
+	);
+	const nonlabeledFinishedParamsAsCombinedStr = params.join(", ");
+	const labeledFinishedParamsAsCombinedStr = paramsLabeledAsAnyType.join(", ");
+	const sendMessageCommand = `chrome.runtime.sendMessage({type: "${fn.name}", args: [${nonlabeledFinishedParamsAsCombinedStr}]})`;
+	// const fnBodyStr = `(${labeledFinishedParamsAsCombinedStr}) => ${sendMessageCommand}`;
+
+	const fullStr = `
+        (${labeledFinishedParamsAsCombinedStr}) => {
+            return new Promise((resolve) => {
+                chrome.runtime.sendMessage({ type: "${fn.name}", args: [${nonlabeledFinishedParamsAsCombinedStr}] }, (response) => {
+                	const maybeError = chrome.runtime.lastError;
+                	if(maybeError) {
+                		throw new Error(maybeError.message);
+                	}
+                	return resolve(response);
+                });
+            });
+        }`;
+
+	return fullStr;
+}
+
+const allListeners = dispatcher;
+
+const objStr = `
+{
+${Object.entries(allListeners)
+	.map(([key, value]) => {
+		return `    ${key}: ${mapFnToChromeRuntimeSendMessage(value)},`;
+	})
+	.join("\n")}
+}
+`;
+
+const exportStr = `export const dispatcher = ${objStr};`;
+
+console.log(exportStr);

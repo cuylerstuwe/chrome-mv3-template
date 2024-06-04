@@ -3,6 +3,14 @@ const path = require('path');
 
 const listenerFilenames = fs.readdirSync(path.resolve(__dirname, "../src/background/listeners/functions"));
 
+for(const listenerFilename of listenerFilenames) {
+    const fileContents = fs.readFileSync(path.resolve(__dirname, "../src/background/listeners/functions", listenerFilename), { encoding: "utf-8" });
+    if(!fileContents) {
+        const defaultFileContents = `export async function ${listenerFilename.match(/(.*)\.ts$/)?.[1]}() {\n    // TODO: Implement this listener.\n    return null;\n}`;
+        fs.writeFileSync(path.resolve(__dirname, "../src/background/listeners/functions", listenerFilename), defaultFileContents, { encoding: "utf-8" });
+    }
+}
+
 const listenerFunctionNames = listenerFilenames.map((filename: string) => (
     filename.match(/(.*)\.ts$/)?.[1]
 ));

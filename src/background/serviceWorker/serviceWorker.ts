@@ -12,7 +12,7 @@ async function routeMessage(type: ListenerNames, args: ListenerParams[ListenerNa
 	if (correspondingListener) {
 		/**
 		 * I don't know how to type this properly right now, and it doesn't really matter.
-		 * The type contract is enforced by dispatchToBg regardless,
+		 * The dispatcher enforces the type contract regardless,
 		 * so "hacking" this should be safe as long as all messages are sent via that function.
 		 * @see https://github.com/microsoft/TypeScript/issues/49802
 		 */

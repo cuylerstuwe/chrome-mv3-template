@@ -1,14 +1,17 @@
 import "shared/utils/logBootupDiagnostics";
-import { dispatch } from "foreground/utils/dispatch";
 
-import { allMessageTypes as msg } from "foreground/utils/allMessageTypes";
+import { dispatcher } from "foreground/utils/dispatcher";
 
 async function main() {
-	const myTime = await dispatch(msg.fetchWorldTime);
-	console.log("The current time for me is", myTime?.asFormattedTime);
-
-	const tokyoTime = await dispatch(msg.fetchWorldTime, "timezone/Asia/Tokyo");
-	console.log("The current time in Tokyo is:", tokyoTime?.utcDatetime);
+	setInterval(async () => {
+		let myTime;
+		try {
+			myTime = await dispatcher.fetchWorldTime();
+		} catch (err) {
+			console.error("Couldn't dispatch. Maybe reload the page?", err);
+		}
+		console.log("the time in my timezone is", myTime);
+	}, 5000);
 }
 
 main().then(() => {});
