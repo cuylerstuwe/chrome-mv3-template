@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import childProcess from "child_process";
 import { computeNameForWebpackOutputFolder } from "../webpack-helpers/computeNameForWebpackOutputFolder";
+import ManifestV3 = chrome.runtime.ManifestV3;
 
 const packageJsonText = fs.readFileSync(path.resolve(__dirname, "../package.json")).toString();
 const packageJson = JSON.parse(packageJsonText);
@@ -31,7 +32,7 @@ const iconsObj = Object.fromEntries(
 	iconSizes.map((iconSize) => [iconSize, `${iconDirectory}/${iconFilenamePrefix}${iconSize}.${iconFiletypeSuffix}`]),
 );
 
-const manifestTemplate = {
+const manifestTemplate: ManifestV3 = {
 	key: process.env.DEPLOY_MODE === "local-dev" ? localPublicKeyText : undefined,
 
 	manifest_version: 3,
@@ -55,6 +56,7 @@ const manifestTemplate = {
 		{
 			matches: ["<all_urls>"], // TODO: Make this more specific, rather than the template default of matching everything.
 			js: ["content.js"],
+			run_at: "document_start",
 			// all_frames: true
 		},
 	],
