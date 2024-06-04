@@ -11,7 +11,7 @@
     "build:updated-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=updated-deploy \"npm run build:base\"",
     "build:initial-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=initial-deploy \"npm run build:base\"",
     "test": "jest",
-    "e2e": "node e2e/setup/init.js",
+    "e2e": "ts-node e2e/setup/init.ts",
     "watch:barrel": "nodemon --watch \"src/background/listeners/functions/**\" --ext \"ts\" --ignore \"src/background/listeners/functions/**.test.ts\" --exec \"ts-node webpack-helpers/makeBarrel.ts\""
   },
   "devDependencies": {
@@ -19,6 +19,7 @@
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-react": "^7.24.1",
     "@babel/preset-typescript": "^7.24.1",
+    "@types/chai": "^4.3.16",
     "@types/chrome": "*",
     "@types/jest": "*",
     "@types/node": "^20.12.12",

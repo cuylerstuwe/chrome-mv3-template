@@ -1,8 +1,10 @@
-const puppeteer = require("puppeteer-extra");
+import { Target } from "puppeteer";
 
-const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+import puppeteer from "puppeteer-extra";
 
-const RecaptchaPlugin = require("puppeteer-extra-plugin-recaptcha");
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+
+import RecaptchaPlugin from "puppeteer-extra-plugin-recaptcha";
 puppeteer.use(
 	RecaptchaPlugin({
 		provider: {
@@ -13,14 +15,14 @@ puppeteer.use(
 	}),
 );
 
-const AdblockerPlugin = require("puppeteer-extra-plugin-adblocker");
+import AdblockerPlugin from "puppeteer-extra-plugin-adblocker";
 
 puppeteer.use(StealthPlugin());
 puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
-const { config, pathToDevelopmentExtension } = require("./config");
+import { config, pathToDevelopmentExtension } from "./config";
 
-const { main } = require("../main");
+import { main } from "../main";
 
 async function init() {
 	const browser = await puppeteer.launch({
@@ -41,7 +43,9 @@ async function init() {
 		 * The value of `headless` needs to be either `"new"` or `false` in order for the extension to be loaded.
 		 * Setting it to `true` loads an alternative binary that's similar to Chrome, but which does not support extensions.
 		 * Set it to `false` while debugging the E2E framework or while testing it with new sites to see what's happening.
+		 * NOTE: Our Typescript types don't know about the recently released `"new"` value, so we're ignoring Typescript here.
 		 */
+		// @ts-ignore
 		headless: config.shouldBeHeadless ? "new" : false,
 		executablePath: config.shouldUseChromeForTesting
 			? config.chromeForTestingExecutablePath
@@ -50,7 +54,7 @@ async function init() {
 
 	console.log("Browser launched! Waiting for background page...");
 
-	const serviceWorkerTarget = await browser.waitForTarget((target) => target.type() === "service_worker");
+	const serviceWorkerTarget = await browser.waitForTarget((target: Target) => target.type() === "service_worker");
 	const serviceWorker = await serviceWorkerTarget.worker();
 	void serviceWorker;
 
@@ -72,7 +76,9 @@ async function init() {
 		await main(browser, serviceWorker, newTab);
 
 		await newTab.close();
-	} catch (err) {}
+	} catch (err) {
+		console.error(err);
+	}
 
 	await browser.close();
 }
