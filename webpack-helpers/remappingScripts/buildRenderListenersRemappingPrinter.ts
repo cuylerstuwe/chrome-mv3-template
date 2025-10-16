@@ -1,67 +1,76 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import { dispatcher } from "../../src/foreground/utils/dispatcher";
 
-function $params(func: any) {
-	return (func + "")
-		.replace(/[/][/].*$/gm, "") // strip single-line comments
-		.replace(/\s+/g, "") // strip white space
-		.replace(/[/][*][^/*]*[*][/]/g, "") // strip multi-line comments
-		.split("){", 1)[0]
-		.replace(/^[^(]*[(]/, "") // extract the parameters
-		.replace(/=[^,]+/g, "") // strip any ES6 defaults
-		.split(",")
-		.filter(Boolean); // split & filter [""]
+function getParams(func: (...args: any[]) => unknown) {
+        return (func + "")
+                .replace(/[/][/].*$/gm, "") // strip single-line comments
+                .replace(/\s+/g, "") // strip white space
+                .replace(/[/][*][^/*]*[*][/]/g, "") // strip multi-line comments
+                .split("){", 1)[0]
+                .replace(/^[^(]*[(]/, "") // extract the parameters
+                .replace(/=[^,]+/g, "") // strip any ES6 defaults
+                .split(",")
+                .filter(Boolean); // split & filter [""]
 }
 
-function $paramsWithDefaults(func: any) {
-	return (func + "")
-		.replace(/[/][/].*$/gm, "") // strip single-line comments
-		.replace(/\s+/g, "") // strip white space
-		.replace(/[/][*][^/*]*[*][/]/g, "") // strip multi-line comments
-		.split("){", 1)[0]
-		.replace(/^[^(]*[(]/, "") // extract the parameters
-		.split(",")
-		.filter(Boolean); // split & filter [""]
+function getParamsWithDefaults(func: (...args: any[]) => unknown) {
+        return (func + "")
+                .replace(/[/][/].*$/gm, "") // strip single-line comments
+                .replace(/\s+/g, "") // strip white space
+                .replace(/[/][*][^/*]*[*][/]/g, "") // strip multi-line comments
+                .split("){", 1)[0]
+                .replace(/^[^(]*[(]/, "") // extract the parameters
+                .split(",")
+                .filter(Boolean); // split & filter [""]
 }
 
-function mapFnToChromeRuntimeSendMessage(fn: any) {
-	const params = $params(fn);
-	const paramsWithDefaults = $paramsWithDefaults(fn)!;
-	const paramsLabeledAsAnyType = paramsWithDefaults.map((param: string) =>
-		!param.includes("=") ? `${param}: any` : param,
-	);
-	const nonlabeledFinishedParamsAsCombinedStr = params.join(", ");
-	const labeledFinishedParamsAsCombinedStr = paramsLabeledAsAnyType.join(", ");
-	const sendMessageCommand = `chrome.runtime.sendMessage({type: "${fn.name}", args: [${nonlabeledFinishedParamsAsCombinedStr}]})`;
-	// const fnBodyStr = `(${labeledFinishedParamsAsCombinedStr}) => ${sendMessageCommand}`;
+function mapFnToChromeRuntimeSendMessage(fn: (...args: any[]) => unknown) {
+        const params = getParams(fn);
+        const paramsWithDefaults = getParamsWithDefaults(fn)!;
+        const paramsLabeledAsAnyType = paramsWithDefaults.map((param: string) =>
+                !param.includes("=") ? `${param}: any` : param,
+        );
+        const nonlabeledFinishedParamsAsCombinedStr = params.join(", ");
+        const labeledFinishedParamsAsCombinedStr = paramsLabeledAsAnyType.join(", ");
 
-	const fullStr = `
+        const fullStr = `
         (${labeledFinishedParamsAsCombinedStr}) => {
             return new Promise((resolve) => {
                 chrome.runtime.sendMessage({ type: "${fn.name}", args: [${nonlabeledFinishedParamsAsCombinedStr}] }, (response) => {
-                	const maybeError = chrome.runtime.lastError;
-                	if(maybeError) {
-                		throw new Error(maybeError.message);
-                	}
-                	return resolve(response);
+                        const maybeError = chrome.runtime.lastError;
+                        if(maybeError) {
+                                throw new Error(maybeError.message);
+                        }
+                        return resolve(response);
                 });
             });
         }`;
 
-	return fullStr;
+        return fullStr;
 }
 
-const allListeners = dispatcher;
+export function renderDispatcherRemappingModule() {
+        const allListeners = dispatcher;
 
-const objStr = `
+        const objStr = `
 {
 ${Object.entries(allListeners)
-	.map(([key, value]) => {
-		return `    ${key}: ${mapFnToChromeRuntimeSendMessage(value)},`;
-	})
-	.join("\n")}
+        .map(([key, value]) => {
+                return `    ${key}: ${mapFnToChromeRuntimeSendMessage(value as (...args: any[]) => unknown)},`;
+        })
+        .join("\n")}
 }
 `;
 
-const exportStr = `export const dispatcher = ${objStr};`;
+        return `export const dispatcher = ${objStr};`;
+}
 
-console.log(exportStr);
+if (process.argv[1]) {
+        const executedFilePath = path.resolve(process.argv[1]);
+        const currentFilePath = fileURLToPath(import.meta.url);
+
+        if (executedFilePath === currentFilePath) {
+                console.log(renderDispatcherRemappingModule());
+        }
+}

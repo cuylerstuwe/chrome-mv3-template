@@ -6,10 +6,10 @@
   "description": "",
   "license": "Private",
   "scripts": {
-    "build:base": "webpack --config webpack-helpers/remappingScripts/webpack.config.ts && node temp/renderListenersRemappingPrinter.js > temp/remappedAllEnabledListeners.ts && webpack && rm -rf temp",
-    "build:local-dev": "cross-env-shell NODE_ENV=development BUILD_ENV=development DEPLOY_MODE=local-dev \"npm run build:base\"",
-    "build:updated-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=updated-deploy \"npm run build:base\"",
-    "build:initial-deploy": "cross-env-shell NODE_ENV=production BUILD_ENV=production DEPLOY_MODE=initial-deploy \"npm run build:base\"",
+    "build:base": "ts-node --project tsconfig.json --esm scripts/build.ts",
+    "build:local-dev": "npm run build:base -- --env development --build-env development --deploy-mode local-dev",
+    "build:updated-deploy": "npm run build:base -- --env production --build-env production --deploy-mode updated-deploy",
+    "build:initial-deploy": "npm run build:base -- --env production --build-env production --deploy-mode initial-deploy",
     "test": "jest",
     "e2e": "ts-node e2e/setup/init.ts",
     "watch:barrel": "nodemon --watch \"src/background/listeners/functions/**\" --ext \"ts\" --ignore \"src/background/listeners/functions/**.test.ts\" --exec \"ts-node webpack-helpers/makeBarrel.ts\""
@@ -23,20 +23,14 @@
     "@types/chrome": "*",
     "@types/jest": "*",
     "@types/node": "^20.12.12",
-    "@types/webpack": "^5.28.5",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.2",
     "chai": "^5.1.1",
-    "copy-webpack-plugin": "^12.0.2",
-    "cross-env": "^7.0.3",
     "eslint": "^9.3.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-no-relative-import-paths": "^1.5.4",
     "eslint-plugin-prettier": "^5.1.3",
-    "fork-ts-checker-webpack-plugin": "^9.0.2",
-    "html-webpack-plugin": "^5.6.0",
     "jest": "^27.0.6",
     "nodemon": "^3.1.3",
     "prettier": "^3.2.5",
@@ -46,9 +40,7 @@
     "puppeteer-extra-plugin-recaptcha": "^3.6.8",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "webpack": "^5.45.1",
-    "webpack-cli": "^4.7.2"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "zod": "^3.23.8"
