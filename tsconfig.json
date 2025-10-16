@@ -107,6 +107,9 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "src", "webpack-helpers", "eslint.config.js, babel.config.js, jest.config.js"
+    "src",
+    "webpack-helpers",
+    "scripts",
+    "eslint.config.js, babel.config.js, jest.config.js"
   ]
 }
